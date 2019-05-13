@@ -26,7 +26,7 @@ To be clear, it is already possible to do this today if your `propTypes` objects
 
 # Usage
 
-__mocks__/prop-types.js:
+\_\_mocks\_\_/prop-types.js:
 ```javascript
     module.exports = require('mock-prop-types');
 ```
