@@ -1,3 +1,5 @@
+const serialize = require('serialize-javascript');
+
 /**
  * create a PropType of the given type
  * @param{String} type
@@ -19,6 +21,9 @@ function _getPropProxy(type) {
                     return type;
                 case `isRequired`:
                     return isRequiredProxy;
+                case `toJSON`:
+                case `toString`:
+                    return function() { return type; };
                 default:
                     return target[prop];
             }
@@ -33,7 +38,7 @@ function _getPropProxy(type) {
  */
 function _getFnPropProxy(type) {
     const fn = function(...args) {
-        const key = `${args}`;
+        const key = serialize(args);
 
         fn[key] = fn[key] || _getPropProxy(`${type}(${key})`);
 
@@ -43,7 +48,8 @@ function _getFnPropProxy(type) {
     return fn;
 }
 
-module.exports = {
+const _exports = {
+    any: _getPropProxy(`PropTypes.any`),
     array: _getPropProxy(`PropTypes.array`),
     arrayOf: _getFnPropProxy(`PropTypes.arrayOf`),
     bool: _getPropProxy(`PropTypes.bool`),
@@ -61,3 +67,7 @@ module.exports = {
     string: _getPropProxy(`PropTypes.string`),
     symbol: _getPropProxy(`PropTypes.symbol`)
 };
+
+_exports.default = _exports;
+
+module.exports = _exports;
