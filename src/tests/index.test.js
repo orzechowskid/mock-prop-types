@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const PropTypes = require('../index');
 
 class MockClass { }
@@ -5,6 +7,16 @@ class MockDifferentClass { }
 
 describe(`the mock-prop-types module`, function() {
     describe(`any prop-type`, function() {
+        // not sufficiently cool yet - non-required props don't look good
+        //
+        // it(`writes a cool snapshot`, function() {
+        //   expect({
+        //     foo: PropTypes.any.isRequired,
+        //     bar: PropTypes.any,
+        //     baz: PropTypes.oneOf([ 'a', 'b', 'c' ])
+        //   }).toMatchSnapshot();
+        // });
+
         it(`exists`, function() {
             expect(PropTypes.any).toBeDefined();
         });
@@ -1054,6 +1066,72 @@ describe(`the mock-prop-types module`, function() {
                     foo: PropTypes.symbol
                 });
             });
+        });
+    });
+
+    /* weird test cases */
+
+    it(`doesn't choke on the big boy`, function() {
+        expect({
+            optionalArray: PropTypes.array,
+            optionalBool: PropTypes.bool,
+            optionalFunc: PropTypes.func,
+            optionalNumber: PropTypes.number,
+            optionalObject: PropTypes.object,
+            optionalString: PropTypes.string,
+            optionalSymbol: PropTypes.symbol,
+            optionalNode: PropTypes.node,
+            optionalElement: PropTypes.element,
+            optionalElementType: PropTypes.elementType,
+            optionalMessage: PropTypes.instanceOf(MockClass),
+            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalUnion: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+                PropTypes.instanceOf(MockClass)
+            ]),
+            optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+            optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+            optionalObjectWithShape: PropTypes.shape({
+                optionalProperty: PropTypes.string,
+                requiredProperty: PropTypes.number.isRequired
+            }),
+            optionalObjectWithStrictShape: PropTypes.exact({
+                optionalProperty: PropTypes.string,
+                requiredProperty: PropTypes.number.isRequired
+            }),
+            requiredFunc: PropTypes.func.isRequired,
+            requiredAny: PropTypes.any.isRequired
+        }).toEqual({
+            optionalArray: PropTypes.array,
+            optionalBool: PropTypes.bool,
+            optionalFunc: PropTypes.func,
+            optionalNumber: PropTypes.number,
+            optionalObject: PropTypes.object,
+            optionalString: PropTypes.string,
+            optionalSymbol: PropTypes.symbol,
+            optionalNode: PropTypes.node,
+            optionalElement: PropTypes.element,
+            optionalElementType: PropTypes.elementType,
+            optionalMessage: PropTypes.instanceOf(MockClass),
+            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalUnion: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+                PropTypes.instanceOf(MockClass)
+            ]),
+            optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+            optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+            optionalObjectWithShape: PropTypes.shape({
+                optionalProperty: PropTypes.string,
+                requiredProperty: PropTypes.number.isRequired
+            }),
+            optionalObjectWithStrictShape: PropTypes.exact({
+                optionalProperty: PropTypes.string,
+                requiredProperty: PropTypes.number.isRequired
+            }),
+            requiredFunc: PropTypes.func.isRequired,
+            requiredAny: PropTypes.any.isRequired
         });
     });
 });

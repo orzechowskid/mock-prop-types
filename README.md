@@ -22,7 +22,11 @@ describe('my component', () => {
 });
 ```
 
-To be clear, it is already possible to do this today if your `propTypes` objects are simple enough.  What doesn't work out-of-the-box is more complex prop-types like `oneOf`, `shape`, etc.  This library provides support for those complex prop-types, as well as renaming some stuff internally so that functions have slightly more useful names like "string (required)" instead of "bound checkType".
+To be clear, it is already possible to do this today if your prop-types are simple enough.  What doesn't work out-of-the-box is more complex prop-types like `oneOf`, `shape`, etc.  This library provides support for those complex prop-types, as well as renaming some stuff internally so that error messages contain slightly more useful text like "string (required)" instead of "bound checkType".
+
+# Requirements
+
+node >= 6.x
 
 # Installation
 
@@ -50,7 +54,24 @@ Create a new [manual mock](https://jestjs.io/docs/en/manual-mocks#mocking-node-m
 
 (TODO: example for `moduleNameMapper`)
 
+You should now be able to write a unit test which verifies that your component exports the expected set of `propTypes`:
 
+```javascript
+import {
+  MyComponent
+} from '../MyComponent';
+
+describe('my component', () => {
+  it('exposes the expected propTypes', function() {
+    expect(MyComponent.propTypes).toEqual({
+      className: PropTypes.string,
+      data: PropTypes.arrayOf(PropTypes.number),
+      type: PropTypes.oneOf([ 'debug', 'info', 'warn', 'error' ]).isRequired
+    });
+  });
+});
+
+```
 
 # License
 

@@ -6,21 +6,13 @@ const serialize = require('serialize-javascript');
  * @return{Proxy}
  */
 function _getPropProxy(type) {
-    const isRequiredProxy = new Proxy(function() { }, {
-        get(target, prop) {
-            return prop === `name`
-                ? `${type} (required)`
-                : target[prop];
-        }
-    });
-
     return new Proxy(function() { }, {
         get(target, prop) {
             switch (prop) {
                 case `name`:
                     return type;
                 case `isRequired`:
-                    return isRequiredProxy;
+                    return `${type} (required)`;
                 case `toJSON`:
                 case `toString`:
                     return function() { return type; };
@@ -54,6 +46,7 @@ const _exports = {
     arrayOf: _getFnPropProxy(`PropTypes.arrayOf`),
     bool: _getPropProxy(`PropTypes.bool`),
     element: _getPropProxy(`PropTypes.element`),
+    elementType: _getPropProxy(`PropTypes.elementType`),
     exact: _getFnPropProxy(`PropTypes.exact`),
     func: _getPropProxy(`PropTypes.func`),
     instanceOf: _getFnPropProxy(`PropTypes.instanceOf`),
