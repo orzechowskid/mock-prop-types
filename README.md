@@ -24,11 +24,23 @@ describe('my component', () => {
 
 To be clear, it is already possible to do this today if your `propTypes` objects are simple enough.  What doesn't work out-of-the-box is more complex prop-types like `oneOf`, `shape`, etc.  This library provides support for those complex prop-types, as well as renaming some stuff internally so that functions have slightly more useful names like "string (required)" instead of "bound checkType".
 
+# Installation
+
+```sh
+$ npm install --save-dev mock-prop-types
+```
+
+or
+
+```sh
+$ yarn install --dev mock-prop-types
+```
+
 # Usage
 
 ## Jest
 
-Create a new [manual mock](https://jestjs.io/docs/en/manual-mocks#mocking-node-modules) by adding a new `prop-types.js` file inside a directory named \_\_mocks\_\_ which lives in the same directory as node_modules.
+Create a new [manual mock](https://jestjs.io/docs/en/manual-mocks#mocking-node-modules) by adding a new `prop-types.js` file inside a directory named \_\_mocks\_\_ which  is a sibling of node_modules.
 
 \_\_mocks\_\_/prop-types.js:
 
@@ -36,7 +48,9 @@ Create a new [manual mock](https://jestjs.io/docs/en/manual-mocks#mocking-node-m
     module.exports = require('mock-prop-types');
 ```
 
-    Jest should now 
+(TODO: example for `moduleNameMapper`)
+
+
 
 # License
 
