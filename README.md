@@ -28,13 +28,15 @@ To be clear, it is already possible to do this today if your `propTypes` objects
 
 ## Jest
 
-add a new `prop-types.js` file inside a \_\_mocks\_\_ directory which is a sibling of your node_modules directory containing `prop-types`.
+Create a new [manual mock](https://jestjs.io/docs/en/manual-mocks#mocking-node-modules) by adding a new `prop-types.js` file inside a directory named \_\_mocks\_\_ which lives in the same directory as node_modules.
 
 \_\_mocks\_\_/prop-types.js:
 
 ```javascript
     module.exports = require('mock-prop-types');
 ```
+
+    Jest should now 
 
 # License
 
