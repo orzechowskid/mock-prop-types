@@ -1,22 +1,14 @@
 const PropTypes = require('prop-types');
 const serialize = require('serialize-javascript');
 
-function _serialize(items) {
-    return serialize(items.map(function(item) {
-        return item.serialize
-            ? item.serialize()
-            : item;
-    }));
-}
-
 /**
  * create a PropType of the given type
  * @param{String} type
  * @return{Proxy}
  */
 function _getPropProxy(type) {
-    const name = `_PropTypes.${type}`;
-    const requiredName = `${name} (required)`;
+    const name = `PropTypes.${type}`;
+    const requiredName = `${name}.isRequired`;
     const baseProp = PropTypes[type];
     const requiredProp = baseProp.isRequired;
     const requiredProxy = new Proxy(requiredProp, {
@@ -32,10 +24,10 @@ function _getPropProxy(type) {
     const p = new Proxy(baseProp, {
         get(target, prop) {
             switch (prop) {
-                case `name`:
-                    return name;
                 case `isRequired`:
                     return requiredProxy;
+                case `name`:
+                    return name;
                 default:
                     return target[prop];
             }
@@ -43,9 +35,7 @@ function _getPropProxy(type) {
     });
 
     p.toString = function() { return name; };
-    p.serialize = function() { return name; };
     requiredProxy.toString = function() { return requiredName; };
-    requiredProxy.serialize = function() { return requiredName; };
 
     return p;
 }
@@ -56,19 +46,37 @@ function _getPropProxy(type) {
  * @return{Function}
  */
 function _getFnPropProxy(type) {
-    const name = `_PropTypes.${type}`;
+    const name = `PropTypes.${type}`;
     const baseFnProp = PropTypes[type];
     const p = new Proxy(baseFnProp, {
         apply(target, thisArg, args) {
-            const key = _serialize(args);
+            const key = serialize(args).slice(1, -1);
+            const checkerName = `${name}(${key})`;
+            const requiredName = `${checkerName}.isRequired`;
 
             if (p[key]) {
                 return p[key];
             }
 
-            p[key] = new Proxy(PropTypes[type].apply(thisArg, args), {
+            const baseChecker = target.apply(thisArg, args);
+            const requiredChecker = baseChecker.isRequired;
+            const requiredProxy = new Proxy(requiredChecker, {
                 get(target, prop) {
                     switch (prop) {
+                        case `name`:
+                            return requiredName;
+                        default:
+                            return target[prop];
+                    }
+                }
+            });
+
+            requiredProxy.toString = function() { return requiredName; };
+            p[key] = new Proxy(baseChecker, {
+                get(target, prop) {
+                    switch (prop) {
+                        case `isRequired`:
+                            return requiredProxy;
                         case `name`:
                             return `${name}(${key})`;
                         default:
@@ -76,8 +84,7 @@ function _getFnPropProxy(type) {
                     }
                 }
             });
-            p[key].toString = function() { return `${name}(${key})`; };
-            p[key].serialize = function() { return `${name}(${key})`; };
+            p[key].toString = function() { return checkerName; };
 
             return p[key];
         }
