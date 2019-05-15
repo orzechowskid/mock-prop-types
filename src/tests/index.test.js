@@ -7,16 +7,6 @@ class MockDifferentClass { }
 
 describe(`the mock-prop-types module`, function() {
     describe(`any prop-type`, function() {
-        // not sufficiently cool yet - non-required props don't look good
-        //
-        // it(`writes a cool snapshot`, function() {
-        //   expect({
-        //     foo: PropTypes.any.isRequired,
-        //     bar: PropTypes.any,
-        //     baz: PropTypes.oneOf([ 'a', 'b', 'c' ])
-        //   }).toMatchSnapshot();
-        // });
-
         it(`exists`, function() {
             expect(PropTypes.any).toBeDefined();
         });
@@ -33,15 +23,15 @@ describe(`the mock-prop-types module`, function() {
             expect({
                 foo: PropTypes.any
             }).not.toEqual({
-                foo: PropTypes.bool
+                foo: PropTypes.oneOf([ 'foo', 'bar', 'baz' ])
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `any`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `any`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.any !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -89,11 +79,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `array`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `array`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.array !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -136,7 +126,7 @@ describe(`the mock-prop-types module`, function() {
         it(`does not match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.arrayOf(PropTypes.bool)
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.arrayOf(PropTypes.number)
             });
         });
@@ -149,11 +139,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `arrayOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `arrayOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.arrayOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -209,11 +199,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `bool`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `bool`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.bool !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -261,11 +251,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `element`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `element`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.element !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -314,7 +304,7 @@ describe(`the mock-prop-types module`, function() {
                 foo: PropTypes.exact({
                     bar: PropTypes.bool
                 })
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.exact({
                     bar: PropTypes.string
                 })
@@ -331,11 +321,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `exact`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `exact`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.exact !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -405,11 +395,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `func`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `func`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.func !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -452,7 +442,7 @@ describe(`the mock-prop-types module`, function() {
         it(`does not match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.instanceOf(MockClass)
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.instanceOf(MockDifferentClass)
             });
         });
@@ -465,11 +455,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `instanceOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `instanceOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.instanceOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -525,11 +515,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `node`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `node`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.node !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -577,11 +567,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `number`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `number`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.number !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -629,11 +619,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `object`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `object`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.object !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -676,7 +666,7 @@ describe(`the mock-prop-types module`, function() {
         it(`does not match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.objectOf(PropTypes.bool)
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.objectOf(PropTypes.number)
             });
         });
@@ -689,11 +679,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `objectOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `objectOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.objectOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -744,7 +734,7 @@ describe(`the mock-prop-types module`, function() {
         it(`does not match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.oneOf([ 0 ])
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.oneOf([ 1 ])
             });
         });
@@ -757,11 +747,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `oneOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `oneOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.oneOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -812,8 +802,8 @@ describe(`the mock-prop-types module`, function() {
         it(`does not match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.oneOfType([ PropTypes.bool ])
-            }).not.toEqual({
-                foo: PropTypes.oneOfType(PropTypes.instanceOf(MockClass))
+            }).toEqual({
+                foo: PropTypes.oneOfType([ PropTypes.instanceOf(MockClass) ])
             });
         });
 
@@ -825,11 +815,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `oneOfType`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `oneOfType`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.oneOfType !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -850,7 +840,7 @@ describe(`the mock-prop-types module`, function() {
                 expect({
                     foo: PropTypes.oneOfType([ PropTypes.bool ]).isRequired
                 }).not.toEqual({
-                    foo: PropTypes.oneOfType(PropTypes.instanceOf(MockClass)).isRequired
+                    foo: PropTypes.oneOfType([ PropTypes.instanceOf(MockClass) ]).isRequired
                 });
             });
 
@@ -889,7 +879,7 @@ describe(`the mock-prop-types module`, function() {
                     foo: PropTypes.bool,
                     bar: PropTypes.string
                 })
-            }).not.toEqual({
+            }).toEqual({
                 foo: PropTypes.shape({
                     foo: PropTypes.string,
                     bar: PropTypes.bool
@@ -908,11 +898,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `shape`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `shape`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.shape !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -986,11 +976,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `string`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `string`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.string !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -1038,11 +1028,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `symbol`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `symbol`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.symbol !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -1084,7 +1074,7 @@ describe(`the mock-prop-types module`, function() {
             optionalElement: PropTypes.element,
             optionalElementType: PropTypes.elementType,
             optionalMessage: PropTypes.instanceOf(MockClass),
-            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalEnum: PropTypes.oneOf([ 'News', 'Photos' ]),
             optionalUnion: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number,
@@ -1114,7 +1104,7 @@ describe(`the mock-prop-types module`, function() {
             optionalElement: PropTypes.element,
             optionalElementType: PropTypes.elementType,
             optionalMessage: PropTypes.instanceOf(MockClass),
-            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalEnum: PropTypes.oneOf([ 'News', 'Photos' ]),
             optionalUnion: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number,

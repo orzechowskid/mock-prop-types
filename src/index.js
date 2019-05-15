@@ -2,17 +2,11 @@ const PropTypes = require('prop-types');
 const serialize = require('serialize-javascript');
 
 function _serialize(items) {
-    console.log(`items:`, items);
-    try {
-        return serialize(items.map(function(item) {
-            return item.toString
-                ? item.toString()
-                : item;
-        }));
-    } catch (ex) {
-        console.log(`items:`, items);
-        return 'herpaderp';
-    }
+    return serialize(items.map(function(item) {
+        return item.serialize
+            ? item.serialize()
+            : item;
+    }));
 }
 
 /**
@@ -22,39 +16,36 @@ function _serialize(items) {
  */
 function _getPropProxy(type) {
     const name = `_PropTypes.${type}`;
+    const requiredName = `${name} (required)`;
     const baseProp = PropTypes[type];
     const requiredProp = baseProp.isRequired;
     const requiredProxy = new Proxy(requiredProp, {
         get(target, prop) {
             switch (prop) {
                 case `name`:
-                    return `${name} (required)`;
-                case Symbol.toPrimitive:
-                    return `_herp${name} (required)`;
-                case toString:
-                    return function() { return `_herp${name} (required)`; };
+                    return requiredName;
                 default:
-                    return baseProp[prop];
+                    return target[prop];
             }
         }
     });
-    const p = new Proxy(function() { }, {
+    const p = new Proxy(baseProp, {
         get(target, prop) {
             switch (prop) {
                 case `name`:
                     return name;
                 case `isRequired`:
                     return requiredProxy;
-                case toString:
-                case Symbol.toPrimitive:
-                    return function() { return `_derp`; };
                 default:
                     return target[prop];
             }
         }
     });
 
-    p.toString = p[Symbol.toPrimitive] = function() { return name; };
+    p.toString = function() { return name; };
+    p.serialize = function() { return name; };
+    requiredProxy.toString = function() { return requiredName; };
+    requiredProxy.serialize = function() { return requiredName; };
 
     return p;
 }
@@ -67,8 +58,8 @@ function _getPropProxy(type) {
 function _getFnPropProxy(type) {
     const name = `_PropTypes.${type}`;
     const baseFnProp = PropTypes[type];
-    const p = new Proxy(function() { }, {
-        apply(target, thisArg, args) { // e.g. oneOf(...args)
+    const p = new Proxy(baseFnProp, {
+        apply(target, thisArg, args) {
             const key = _serialize(args);
 
             if (p[key]) {
@@ -77,18 +68,20 @@ function _getFnPropProxy(type) {
 
             p[key] = new Proxy(PropTypes[type].apply(thisArg, args), {
                 get(target, prop) {
-                    
-                    return target[prop];
+                    switch (prop) {
+                        case `name`:
+                            return `${name}(${key})`;
+                        default:
+                            return target[prop];
+                    }
                 }
             });
-            p[key].toString = p[key][Symbol.toPrimitive] =
-                function() { return `balls`; };
+            p[key].toString = function() { return `${name}(${key})`; };
+            p[key].serialize = function() { return `${name}(${key})`; };
 
             return p[key];
         }
     });
-
-    p.toString = p[Symbol.toPrimitive] = function() { return `ohhh damn`; };
 
     return p;
 }
