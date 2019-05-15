@@ -22,7 +22,7 @@ describe('my component', () => {
 });
 ```
 
-To be clear, it is already possible to do this today if your prop-types are simple enough.  What doesn't work out-of-the-box is more complex prop-types like `oneOf`, `shape`, etc.  This library provides support for those complex prop-types, as well as renaming some stuff internally so that error messages contain slightly more useful text like "string (required)" instead of "bound checkType".
+To be clear, it is already possible to do this today if your prop-types are simple enough.  What doesn't work out-of-the-box is more complex prop-types like `oneOf`, `shape`, etc.  This library provides support for those complex prop-types, as well as renaming some stuff internally so that error messages contain slightly more useful text like `string.isRequired` instead of `[ Function bound checkType ]`.
 
 # Requirements
 
