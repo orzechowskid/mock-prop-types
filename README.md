@@ -73,6 +73,23 @@ describe('my component', () => {
 
 ```
 
+You should still be able to run your existing unit tests which call prop-type validators directly, if you really want to:
+
+```javascript
+it(`does complain when given the wrong props`, function() {
+  shallow(
+    <MyComponent
+      className="foo"
+      data={[ true, true, false, true ]} // arrayOf(PropTypes.bool), not arrayOf(PropTypes.number) as specified
+      type="debug"
+    />
+  );
+
+  expect(console.error).toBeCalled(); // "Warning: Failed prop type: Invalid prop" etc etc etc
+});
+
+```
+
 # License
 
 MIT
