@@ -1,22 +1,19 @@
 /* eslint-env jest */
 
-const PropTypes = require('../index');
+import {
+    shallow
+} from 'enzyme';
+import React, {
+    Component
+} from 'react';
+
+import PropTypes from '../index';
 
 class MockClass { }
 class MockDifferentClass { }
 
 describe(`the mock-prop-types module`, function() {
     describe(`any prop-type`, function() {
-        // not sufficiently cool yet - non-required props don't look good
-        //
-        // it(`writes a cool snapshot`, function() {
-        //   expect({
-        //     foo: PropTypes.any.isRequired,
-        //     bar: PropTypes.any,
-        //     baz: PropTypes.oneOf([ 'a', 'b', 'c' ])
-        //   }).toMatchSnapshot();
-        // });
-
         it(`exists`, function() {
             expect(PropTypes.any).toBeDefined();
         });
@@ -33,15 +30,15 @@ describe(`the mock-prop-types module`, function() {
             expect({
                 foo: PropTypes.any
             }).not.toEqual({
-                foo: PropTypes.bool
+                foo: PropTypes.oneOf([ 'foo', 'bar', 'baz' ])
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `any`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `any`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.any !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -58,7 +55,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.any.isRequired
                 }).not.toEqual({
@@ -89,11 +86,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `array`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `array`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.array !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -110,7 +107,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.array.isRequired
                 }).not.toEqual({
@@ -133,7 +130,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.arrayOf(PropTypes.bool)
             }).not.toEqual({
@@ -149,11 +146,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `arrayOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `arrayOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.arrayOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -178,7 +175,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.arrayOf(PropTypes.bool).isRequired
                 }).not.toEqual({
@@ -209,11 +206,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `bool`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `bool`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.bool !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -230,7 +227,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.bool.isRequired
                 }).not.toEqual({
@@ -261,11 +258,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `element`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `element`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.element !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -282,7 +279,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.element.isRequired
                 }).not.toEqual({
@@ -309,7 +306,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.exact({
                     bar: PropTypes.bool
@@ -331,11 +328,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `exact`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `exact`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.exact !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -370,7 +367,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.exact({
                         bar: PropTypes.bool
@@ -405,11 +402,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `func`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `func`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.func !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -426,7 +423,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.func.isRequired
                 }).not.toEqual({
@@ -449,7 +446,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.instanceOf(MockClass)
             }).not.toEqual({
@@ -465,11 +462,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `instanceOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `instanceOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.instanceOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -494,7 +491,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.instanceOf(MockClass).isRequired
                 }).not.toEqual({
@@ -525,11 +522,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `node`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `node`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.node !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -546,7 +543,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.node.isRequired
                 }).not.toEqual({
@@ -577,11 +574,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `number`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `number`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.number !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -598,7 +595,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.number.isRequired
                 }).not.toEqual({
@@ -629,11 +626,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `object`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `object`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.object !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -650,7 +647,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.object.isRequired
                 }).not.toEqual({
@@ -673,7 +670,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.objectOf(PropTypes.bool)
             }).not.toEqual({
@@ -689,11 +686,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `objectOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `objectOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.objectOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -718,7 +715,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.objectOf(PropTypes.bool).isRequired
                 }).not.toEqual({
@@ -741,7 +738,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.oneOf([ 0 ])
             }).not.toEqual({
@@ -757,11 +754,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `oneOf`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `oneOf`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.oneOf !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -786,7 +783,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.oneOf([ 0 ]).isRequired
                 }).not.toEqual({
@@ -809,11 +806,11 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.oneOfType([ PropTypes.bool ])
             }).not.toEqual({
-                foo: PropTypes.oneOfType(PropTypes.instanceOf(MockClass))
+                foo: PropTypes.oneOfType([ PropTypes.instanceOf(MockClass) ])
             });
         });
 
@@ -825,11 +822,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `oneOfType`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `oneOfType`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.oneOfType !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -850,11 +847,11 @@ describe(`the mock-prop-types module`, function() {
                 expect({
                     foo: PropTypes.oneOfType([ PropTypes.bool ]).isRequired
                 }).not.toEqual({
-                    foo: PropTypes.oneOfType(PropTypes.instanceOf(MockClass)).isRequired
+                    foo: PropTypes.oneOfType([ PropTypes.instanceOf(MockClass) ]).isRequired
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.oneOfType([ PropTypes.bool ]).isRequired
                 }).not.toEqual({
@@ -883,7 +880,7 @@ describe(`the mock-prop-types module`, function() {
             });
         });
 
-        it(`does not match itself when given different arguments`, function() {
+        it(`doesn't match itself when given different arguments`, function() {
             expect({
                 foo: PropTypes.shape({
                     foo: PropTypes.bool,
@@ -908,11 +905,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `shape`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `shape`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.shape !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -949,7 +946,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.shape({
                         foo: PropTypes.bool,
@@ -986,11 +983,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `string`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `string`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.string !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -1007,7 +1004,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.string.isRequired
                 }).not.toEqual({
@@ -1038,11 +1035,11 @@ describe(`the mock-prop-types module`, function() {
             });
 
             expect(Object.keys(PropTypes)
-                   .filter(function(key) { return key !== `symbol`; })
-                   .reduce(function(match, key) {
-                       return match
+                .filter(function(key) { return key !== `symbol`; })
+                .reduce(function(match, key) {
+                    return match
                            && (PropTypes.symbol !== PropTypes[key]);
-                   }, true))
+                }, true))
                 .toBe(true);
         });
 
@@ -1059,7 +1056,7 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
 
-            it(`does not match the non-required version`, function() {
+            it(`doesn't match the non-required version`, function() {
                 expect({
                     foo: PropTypes.symbol.isRequired
                 }).not.toEqual({
@@ -1067,6 +1064,76 @@ describe(`the mock-prop-types module`, function() {
                 });
             });
         });
+    });
+
+    /* make sure PropType checking still works */
+
+    describe(`prop validation`, function() {
+        function MyComponent(props) {
+            return (
+                <div className={props.className}>
+                    {props.value}
+                </div>
+            );
+        }
+
+        MyComponent.propTypes = {
+            className: PropTypes.string,
+            value: PropTypes.oneOf([ 1, 2, 4 ])
+        };
+
+        beforeEach(function() {
+            jest.spyOn(console, `error`)
+                .mockImplementation(jest.fn(function() { }));
+        });
+
+        afterEach(function() {
+            console.error.mockRestore();
+        });
+
+        it(`doesn't complain when given the right props`, function() {
+            shallow(
+                <MyComponent
+                    className="foo"
+                    value={2}
+                />
+            );
+
+            expect(console.error).not.toBeCalled();
+        });
+
+        it(`does complain when given the wrong props`, function() {
+            shallow(
+                <MyComponent
+                    className="foo"
+                    value={3}
+                />
+            );
+
+            expect(console.error).toBeCalled();
+        });
+    });
+
+    /* string validation */
+
+    it(`properly stringifies regular PropTypes`, function() {
+        expect(`${PropTypes.bool}`)
+            .toEqual(`PropTypes.bool`);
+    });
+
+    it(`properly stringifies isRequired for regular PropTypes`, function() {
+        expect(`${PropTypes.bool.isRequired}`)
+            .toEqual(`PropTypes.bool.isRequired`);
+    });
+
+    it(`properly stringifies factory PropTypes`, function() {
+        expect(`${PropTypes.oneOf([ 'foo', 'bar' ])}`)
+            .toEqual(`PropTypes.oneOf(["foo","bar"])`);
+    });
+
+    it(`properly stringifies isRequired for factory PropTypes`, function() {
+        expect(`${PropTypes.oneOfType([ PropTypes.bool, PropTypes.number ])}`)
+            .toEqual(`PropTypes.oneOfType([PropTypes.bool,PropTypes.number])`);
     });
 
     /* weird test cases */
@@ -1084,7 +1151,7 @@ describe(`the mock-prop-types module`, function() {
             optionalElement: PropTypes.element,
             optionalElementType: PropTypes.elementType,
             optionalMessage: PropTypes.instanceOf(MockClass),
-            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalEnum: PropTypes.oneOf([ 'News', 'Photos' ]),
             optionalUnion: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number,
@@ -1114,7 +1181,7 @@ describe(`the mock-prop-types module`, function() {
             optionalElement: PropTypes.element,
             optionalElementType: PropTypes.elementType,
             optionalMessage: PropTypes.instanceOf(MockClass),
-            optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+            optionalEnum: PropTypes.oneOf([ 'News', 'Photos' ]),
             optionalUnion: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number,

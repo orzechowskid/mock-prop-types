@@ -1,6 +1,7 @@
 module.exports = {
     "parserOptions": {
-        "ecmaVersion": 2017
+        "ecmaVersion": 2017,
+        "sourceType": "module"
     },
     "env": {
         "es6": true,
@@ -19,9 +20,6 @@ module.exports = {
         "indent": [ "warn", 4, {
             "SwitchCase": 1
         } ],
-        "max-len": [ "warn", {
-            "ignoreComments": true
-        } ],
         "no-console": [ "error", {
             "allow": [ "info", "warn", "error" ]
         } ],
@@ -38,10 +36,6 @@ module.exports = {
         "prefer-arrow-callback": "off",
         "prefer-destructuring": [ "warn" ],
         "quotes": "off",
-        "sort-keys": [ "warn", "asc", {
-            "caseSensitive": false,
-            "natural": true
-        } ],
         "space-before-function-paren": [ "warn", {
             "anonymous": "never",
             "asyncArrow": "always",

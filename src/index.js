@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 const serialize = require('serialize-javascript');
 
 /**
@@ -6,21 +7,37 @@ const serialize = require('serialize-javascript');
  * @return{Proxy}
  */
 function _getPropProxy(type) {
-    return new Proxy(function() { }, {
+    const name = `PropTypes.${type}`;
+    const requiredName = `${name}.isRequired`;
+    const baseProp = PropTypes[type];
+    const requiredProp = baseProp.isRequired;
+    const requiredProxy = new Proxy(requiredProp, {
         get(target, prop) {
             switch (prop) {
                 case `name`:
-                    return type;
-                case `isRequired`:
-                    return `${type} (required)`;
-                case `toJSON`:
-                case `toString`:
-                    return function() { return type; };
+                    return requiredName;
                 default:
                     return target[prop];
             }
         }
     });
+    const p = new Proxy(baseProp, {
+        get(target, prop) {
+            switch (prop) {
+                case `isRequired`:
+                    return requiredProxy;
+                case `name`:
+                    return name;
+                default:
+                    return target[prop];
+            }
+        }
+    });
+
+    p.toString = function() { return name; };
+    requiredProxy.toString = function() { return requiredName; };
+
+    return p;
 }
 
 /**
@@ -29,36 +46,72 @@ function _getPropProxy(type) {
  * @return{Function}
  */
 function _getFnPropProxy(type) {
-    const fn = function(...args) {
-        const key = serialize(args);
+    const name = `PropTypes.${type}`;
+    const baseFnProp = PropTypes[type];
+    const p = new Proxy(baseFnProp, {
+        apply(target, thisArg, args) {
+            const key = serialize(args).slice(1, -1);
+            const checkerName = `${name}(${key})`;
+            const requiredName = `${checkerName}.isRequired`;
 
-        fn[key] = fn[key] || _getPropProxy(`${type}(${key})`);
+            if (p[key]) {
+                return p[key];
+            }
 
-        return fn[key];
-    };
+            const baseChecker = target.apply(thisArg, args);
+            const requiredChecker = baseChecker.isRequired;
+            const requiredProxy = new Proxy(requiredChecker, {
+                get(target, prop) {
+                    switch (prop) {
+                        case `name`:
+                            return requiredName;
+                        default:
+                            return target[prop];
+                    }
+                }
+            });
 
-    return fn;
+            requiredProxy.toString = function() { return requiredName; };
+            p[key] = new Proxy(baseChecker, {
+                get(target, prop) {
+                    switch (prop) {
+                        case `isRequired`:
+                            return requiredProxy;
+                        case `name`:
+                            return `${name}(${key})`;
+                        default:
+                            return target[prop];
+                    }
+                }
+            });
+            p[key].toString = function() { return checkerName; };
+
+            return p[key];
+        }
+    });
+
+    return p;
 }
 
 const _exports = {
-    any: _getPropProxy(`PropTypes.any`),
-    array: _getPropProxy(`PropTypes.array`),
-    arrayOf: _getFnPropProxy(`PropTypes.arrayOf`),
-    bool: _getPropProxy(`PropTypes.bool`),
-    element: _getPropProxy(`PropTypes.element`),
-    elementType: _getPropProxy(`PropTypes.elementType`),
-    exact: _getFnPropProxy(`PropTypes.exact`),
-    func: _getPropProxy(`PropTypes.func`),
-    instanceOf: _getFnPropProxy(`PropTypes.instanceOf`),
-    node: _getPropProxy(`PropTypes.node`),
-    number: _getPropProxy(`PropTypes.number`),
-    object: _getPropProxy(`PropTypes.object`),
-    objectOf: _getFnPropProxy(`PropTypes.objectOf`),
-    oneOf: _getFnPropProxy(`PropTypes.oneOf`),
-    oneOfType: _getFnPropProxy(`PropTypes.oneOfType`),
-    shape: _getFnPropProxy(`PropTypes.shape`),
-    string: _getPropProxy(`PropTypes.string`),
-    symbol: _getPropProxy(`PropTypes.symbol`)
+    any: _getPropProxy(`any`),
+    array: _getPropProxy(`array`),
+    arrayOf: _getFnPropProxy(`arrayOf`),
+    bool: _getPropProxy(`bool`),
+    element: _getPropProxy(`element`),
+    elementType: _getPropProxy(`elementType`),
+    exact: _getFnPropProxy(`exact`),
+    func: _getPropProxy(`func`),
+    instanceOf: _getFnPropProxy(`instanceOf`),
+    node: _getPropProxy(`node`),
+    number: _getPropProxy(`number`),
+    object: _getPropProxy(`object`),
+    objectOf: _getFnPropProxy(`objectOf`),
+    oneOf: _getFnPropProxy(`oneOf`),
+    oneOfType: _getFnPropProxy(`oneOfType`),
+    shape: _getFnPropProxy(`shape`),
+    string: _getPropProxy(`string`),
+    symbol: _getPropProxy(`symbol`)
 };
 
 _exports.default = _exports;
