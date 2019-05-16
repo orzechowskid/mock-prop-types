@@ -3,14 +3,20 @@
 import {
     shallow
 } from 'enzyme';
+import PropTypes from 'prop-types';
 import React, {
     Component
 } from 'react';
 
-import PropTypes from '../index';
-
 class MockClass { }
 class MockDifferentClass { }
+
+jest.mock('prop-types', function() {
+    const RealPropTypes = jest.requireActual('prop-types');
+    const mockPropTypes = jest.requireActual('../index');
+
+    return mockPropTypes(RealPropTypes);
+});
 
 describe(`the mock-prop-types module`, function() {
     describe(`any prop-type`, function() {
