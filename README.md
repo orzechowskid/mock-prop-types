@@ -4,9 +4,9 @@ prop-types mock module, for use with unit-test assertion libraries
 
 # Why?
 
-The external interface to a React component is defined by its set of `propTypes` and `defaultProps`.  Tests should be written to validate this interface, so that any changes to it are caught and semver updated accordingly.
+The external interface to a React component is defined by its sets of `propTypes` and `defaultProps`.  Tests should be written to validate this interface, so that any changes to it are caught and semver updated accordingly.
 
-Existing attempts to solve this problem usually use the `prop-types` library itself to perform prop-types validation, and/or mock out `console.error` to catch error messages.  It seemed strange to require specific types of mock data, and to assert against hardcoded strings, when attempting to validate the shape of a component's API.
+Existing attempts to solve this problem usually use the `prop-types` library itself to perform prop-types validation, and/or mock out `console.error` to catch error messages.  It seemed strange to render components with mock data, and to assert against hardcoded strings, when attempting to validate the shape of a component's API.
 
 This library allows unit-tests to assert directly against the shape of your component's `propTypes` property:
 
