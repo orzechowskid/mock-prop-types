@@ -47,12 +47,12 @@ $ yarn install --dev mock-prop-types
 Create a new [setup file](https://jestjs.io/docs/en/configuration#setupfiles-array) and add the following:
 
 ```javascript
-    jest.mock('prop-types', () => {
-      const RealPropTypes = jest.requireActual('prop-types');
-      const mockPropTypes = jest.requireActual('mock-prop-types');
-      
-      return mockPropTypes(RealPropTypes);
-    });
+jest.mock('prop-types', () => {
+  const RealPropTypes = jest.requireActual('prop-types');
+  const mockPropTypes = jest.requireActual('mock-prop-types');
+
+  return mockPropTypes(RealPropTypes);
+});
 ```
 
 You should now be able to write a unit test which verifies that your component exports the expected set of `propTypes`:
