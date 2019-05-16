@@ -1,6 +1,6 @@
 {
   "name": "mock-prop-types",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "prop-types mock module, for use with jasmine.expect().toEqual()",
   "main": "src/index.js",
   "scripts": {
