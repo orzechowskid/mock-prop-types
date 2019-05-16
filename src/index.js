@@ -1,12 +1,20 @@
-const PropTypes = require('prop-types');
 const serialize = require('serialize-javascript');
 
+function _serialize(args) {
+    return serialize(args.map(function(arg) {
+        return typeof arg === `function`
+            ? arg.name
+            : arg;
+    }));
+}
+
 /**
- * create a PropType of the given type
- * @param{String} type
- * @return{Proxy}
+ * create a PropType proxy around the given type
+ * @param {Map<String, Object>} PropTypes
+ * @param {String} type
+ * @return {Proxy}
  */
-function _getPropProxy(type) {
+function _getPropProxy(PropTypes, type) {
     const name = `PropTypes.${type}`;
     const requiredName = `${name}.isRequired`;
     const baseProp = PropTypes[type];
@@ -14,7 +22,7 @@ function _getPropProxy(type) {
     const requiredProxy = new Proxy(requiredProp, {
         get(target, prop) {
             switch (prop) {
-                case `name`:
+                case `name`: // used by enzyme
                     return requiredName;
                 default:
                     return target[prop];
@@ -41,16 +49,17 @@ function _getPropProxy(type) {
 }
 
 /**
- * create a PropType factory of the given type
- * @param{String} type
- * @return{Function}
+ * create a PropType factory proxy around the given type
+ * @param {Map<String, Object>} PropTypes
+ * @param {String} type
+ * @return {Function}
  */
-function _getFnPropProxy(type) {
+function _getFnPropProxy(PropTypes, type) {
     const name = `PropTypes.${type}`;
     const baseFnProp = PropTypes[type];
     const p = new Proxy(baseFnProp, {
         apply(target, thisArg, args) {
-            const key = serialize(args).slice(1, -1);
+            const key = _serialize(args).slice(1, -1);
             const checkerName = `${name}(${key})`;
             const requiredName = `${checkerName}.isRequired`;
 
@@ -63,7 +72,7 @@ function _getFnPropProxy(type) {
             const requiredProxy = new Proxy(requiredChecker, {
                 get(target, prop) {
                     switch (prop) {
-                        case `name`:
+                        case `name`: // used by enzyme
                             return requiredName;
                         default:
                             return target[prop];
@@ -77,7 +86,7 @@ function _getFnPropProxy(type) {
                     switch (prop) {
                         case `isRequired`:
                             return requiredProxy;
-                        case `name`:
+                        case `name`: // used by enzyme
                             return `${name}(${key})`;
                         default:
                             return target[prop];
@@ -93,27 +102,25 @@ function _getFnPropProxy(type) {
     return p;
 }
 
-const _exports = {
-    any: _getPropProxy(`any`),
-    array: _getPropProxy(`array`),
-    arrayOf: _getFnPropProxy(`arrayOf`),
-    bool: _getPropProxy(`bool`),
-    element: _getPropProxy(`element`),
-    elementType: _getPropProxy(`elementType`),
-    exact: _getFnPropProxy(`exact`),
-    func: _getPropProxy(`func`),
-    instanceOf: _getFnPropProxy(`instanceOf`),
-    node: _getPropProxy(`node`),
-    number: _getPropProxy(`number`),
-    object: _getPropProxy(`object`),
-    objectOf: _getFnPropProxy(`objectOf`),
-    oneOf: _getFnPropProxy(`oneOf`),
-    oneOfType: _getFnPropProxy(`oneOfType`),
-    shape: _getFnPropProxy(`shape`),
-    string: _getPropProxy(`string`),
-    symbol: _getPropProxy(`symbol`)
+module.exports = function(realPropTypes) {
+    return {
+        any: _getPropProxy(realPropTypes, `any`),
+        array: _getPropProxy(realPropTypes, `array`),
+        arrayOf: _getFnPropProxy(realPropTypes, `arrayOf`),
+        bool: _getPropProxy(realPropTypes, `bool`),
+        element: _getPropProxy(realPropTypes, `element`),
+        elementType: _getPropProxy(realPropTypes, `elementType`),
+        exact: _getFnPropProxy(realPropTypes, `exact`),
+        func: _getPropProxy(realPropTypes, `func`),
+        instanceOf: _getFnPropProxy(realPropTypes, `instanceOf`),
+        node: _getPropProxy(realPropTypes, `node`),
+        number: _getPropProxy(realPropTypes, `number`),
+        object: _getPropProxy(realPropTypes, `object`),
+        objectOf: _getFnPropProxy(realPropTypes, `objectOf`),
+        oneOf: _getFnPropProxy(realPropTypes, `oneOf`),
+        oneOfType: _getFnPropProxy(realPropTypes, `oneOfType`),
+        shape: _getFnPropProxy(realPropTypes, `shape`),
+        string: _getPropProxy(realPropTypes, `string`),
+        symbol: _getPropProxy(realPropTypes, `symbol`)
+    };
 };
-
-_exports.default = _exports;
-
-module.exports = _exports;
