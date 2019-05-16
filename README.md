@@ -64,7 +64,7 @@ import {
 } from '../MyComponent';
 
 describe('my component', () => {
-  it('exposes the expected propTypes', function() {
+  it('exposes the expected propTypes', () => {
     expect(MyComponent.propTypes).toEqual({
       className: PropTypes.string,
       data: PropTypes.arrayOf(PropTypes.number),
@@ -78,7 +78,7 @@ describe('my component', () => {
 You should still be able to run your existing unit tests which call prop-type validators directly, if you really want to:
 
 ```javascript
-it(`complains if given the wrong props`, function() {
+it('complains if given the wrong props', () => {
   shallow(
     <MyComponent
       className="foo"
@@ -91,6 +91,10 @@ it(`complains if given the wrong props`, function() {
 });
 
 ```
+
+# Bugs
+
+I've done no testing with custom prop-types yet, so this library may or may not work with them.  (code/test PRs welcome!)
 
 # License
 
