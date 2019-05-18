@@ -1,5 +1,9 @@
 const serialize = require('serialize-javascript');
 
+/**
+ * @param {List<String>} args
+ * @return {String}
+ */
 function _serialize(args) {
     return serialize(args.map(function(arg) {
         return typeof arg === `function`
@@ -121,6 +125,8 @@ module.exports = function(realPropTypes) {
         oneOfType: _getFnPropProxy(realPropTypes, `oneOfType`),
         shape: _getFnPropProxy(realPropTypes, `shape`),
         string: _getPropProxy(realPropTypes, `string`),
-        symbol: _getPropProxy(realPropTypes, `symbol`)
+        symbol: _getPropProxy(realPropTypes, `symbol`),
+
+        checkPropTypes: realPropTypes.checkPropTypes
     };
 };
