@@ -22,6 +22,11 @@ function _getPropProxy(PropTypes, type) {
     const name = `PropTypes.${type}`;
     const requiredName = `${name}.isRequired`;
     const baseProp = PropTypes[type];
+
+    if (!baseProp) {
+        return;
+    }
+
     const requiredProp = baseProp.isRequired;
     const requiredProxy = new Proxy(requiredProp, {
         get(target, prop) {
@@ -61,6 +66,11 @@ function _getPropProxy(PropTypes, type) {
 function _getFnPropProxy(PropTypes, type) {
     const name = `PropTypes.${type}`;
     const baseFnProp = PropTypes[type];
+
+    if (!baseFnProp) {
+        return;
+    }
+
     const p = new Proxy(baseFnProp, {
         apply(target, thisArg, args) {
             const key = _serialize(args).slice(1, -1);
